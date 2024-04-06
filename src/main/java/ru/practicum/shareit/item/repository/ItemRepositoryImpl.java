@@ -25,7 +25,7 @@ public class ItemRepositoryImpl implements ItemRepository {
     public Item findItem(Long itemId) {
         Collection<Item> items = findAll();
         Optional<Item> item = items.stream()
-                .filter(item1 -> item1.getId() == itemId)
+                .filter(item1 -> item1.getId().equals(itemId))
                 .findFirst();
         return item.orElse(null);
     }

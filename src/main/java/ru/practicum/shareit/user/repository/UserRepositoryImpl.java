@@ -61,7 +61,7 @@ public class UserRepositoryImpl implements UserRepository {
     public User findUser(Long userId) {
         Collection<User> users = findAll();
         Optional<User> user = users.stream()
-                .filter(user1 -> user1.getId() == userId)
+                .filter(user1 -> user1.getId().equals(userId))
                 .findFirst();
         return user.orElse(null);
     }
