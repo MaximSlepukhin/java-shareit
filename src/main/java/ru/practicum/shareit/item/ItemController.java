@@ -25,12 +25,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/items")
 public class ItemController {
 
-    public final String USER_HEADER = "X-Sharer-User-Id";
     private final ItemService itemService;
     private final UserService userService;
 
     @PostMapping
-    public ItemDto save(@RequestHeader(USER_HEADER) Long userId,
+    public ItemDto save(@RequestHeader("X-Sharer-User-Id") Long userId,
                         @Valid @RequestBody ItemDto itemDto) {
         Item item = ItemMapper.mapToItem(itemDto, userId);
         userService.checkUserExist(userId);
@@ -41,26 +40,26 @@ public class ItemController {
             MediaType.APPLICATION_JSON_VALUE)
     public ItemDto update(@RequestBody Map<String, String> itemUpdate,
                        @PathVariable Long itemId,
-                       @RequestHeader(USER_HEADER) Long userId) {
+                       @RequestHeader("X-Sharer-User-Id") Long userId) {
         userService.checkUserExist(userId);
         return ItemMapper.mapToItemDto(itemService.updateItem(itemUpdate, userId, itemId));
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto getItem(@RequestHeader(USER_HEADER) Long userId,
+    public ItemDto getItem(@RequestHeader("X-Sharer-User-Id") Long userId,
                            @PathVariable Long itemId) {
         return ItemMapper.mapToItemDto(itemService.findItemById(itemId));
     }
 
     @GetMapping
-    public Collection<ItemDto> getItemsOfUser(@RequestHeader(USER_HEADER) Long userId) {
+    public Collection<ItemDto> getItemsOfUser(@RequestHeader("X-Sharer-User-Id") Long userId) {
         return itemService.findItemsOfUser(userId).stream()
                 .map(ItemMapper::mapToItemDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems(@RequestHeader(USER_HEADER) Long userId,
+    public List<ItemDto> searchItems(@RequestHeader("X-Sharer-User-Id") Long userId,
                                   @RequestParam(name = "text") String text) {
         userService.checkUserExist(userId);
         return itemService.searchItem(userId, text).stream()
