@@ -16,5 +16,6 @@ public interface ItemService {
     Collection<Item> findItemsOfUser(Long userId);
 
     Item updateItem(Map<String, String> userUpdate, Long userId, Long itemId);
+
     List<Item> searchItem(Long userId, String text);
 }
