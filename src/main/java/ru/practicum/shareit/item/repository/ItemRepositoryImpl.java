@@ -49,12 +49,12 @@ public class ItemRepositoryImpl implements ItemRepository {
     @Override
     public Item update(Map<String, String> itemUpdate, Long userId, Long itemId) {
         if (!items.containsKey(itemId)) {
-            throw new ItemNotFoundException("Вещь не найдена");
+            throw new ItemNotFoundException("Вещь c id=" + itemId + " не найдена.");
         }
         Item item = items.get(itemId);
 
         if (!userId.equals(item.getOwner())) {
-            throw new ItemNotBelongUserException("Редактировать вешь может только владелец.");
+            throw new ItemNotBelongUserException("Редактировать вещь может только владелец.");
         }
         Item itemForUpdate = new Item(item.getId(),
                 item.getName(),
