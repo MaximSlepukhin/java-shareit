@@ -20,32 +20,42 @@ public class ItemServiceImpl implements ItemService {
     public Item createItem(Long userId, Item item) {
         item.setOwner(userId);
         var newItem = repository.save(item);
-        log.debug("Добавлен предмет.");
+        log.debug("Предмет успешно добавлен.");
         return newItem;
     }
 
     @Override
     public Item findItemById(Long itemId) {
-        return repository.findItem(itemId);
+        var itemById = repository.findItem(itemId);
+        log.debug("Предмет с id=" + itemId + " найден.");
+        return itemById;
     }
 
     @Override
     public Collection<Item> getAllItems() {
-        return repository.findAll();
+        var listOfItems =  repository.findAll();
+        log.debug("Список со всеми предметами сформирован.");
+        return listOfItems;
     }
 
     @Override
     public Collection<Item> findItemsOfUser(Long userId) {
-        return repository.findItems(userId);
+        var listOfItems =  repository.findItems(userId);
+        log.debug("Список с предметами пользователя с id=" + userId + " сформирован.");
+        return listOfItems;
     }
 
     @Override
     public Item updateItem(Map<String, String> userUpdate, Long userId, Long itemId) {
-        return repository.update(userUpdate,userId, itemId);
+        var newItem = repository.update(userUpdate,userId, itemId);
+        log.debug("Данные предмета с id=" + itemId + " обновлены.");
+        return newItem;
     }
 
     @Override
     public List<Item> searchItem(Long userId, String text) {
-        return (List<Item>) repository.search(userId,text);
+        var listOfItems = (List<Item>) repository.search(userId,text);
+        log.debug("Предмет по запросу найден.");
+        return listOfItems;
     }
 }
