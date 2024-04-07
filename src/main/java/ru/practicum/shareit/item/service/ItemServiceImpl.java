@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -8,7 +9,7 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ItemServiceImpl implements ItemService {
@@ -17,7 +18,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item createItem(Long userId, Item item) {
         item.setOwner(userId);
-        return repository.save(item);
+        var newItem = repository.save(item);
+        log.debug("Добавлен предмет.");
+        return newItem;
     }
 
     @Override

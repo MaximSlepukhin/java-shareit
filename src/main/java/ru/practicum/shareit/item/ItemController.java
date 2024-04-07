@@ -24,13 +24,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @RequestMapping("/items")
 public class ItemController {
+    public static final String USER_HEADER = "X-Sharer-User-Id";
 
     private final ItemService itemService;
     private final UserService userService;
 
     @PostMapping
-    public ItemDto save(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public ItemDto save(@RequestHeader(USER_HEADER) Long userId,
                         @Valid @RequestBody ItemDto itemDto) {
+        log.info("POST запрос на добавление предмета " + itemDto.getName() + " пользователем с id=" + userId +".");
         Item item = ItemMapper.mapToItem(itemDto, userId);
         userService.checkUserExist(userId);
         return ItemMapper.mapToItemDto(itemService.createItem(userId, item));
@@ -40,27 +42,31 @@ public class ItemController {
             MediaType.APPLICATION_JSON_VALUE)
     public ItemDto update(@RequestBody Map<String, String> itemUpdate,
                        @PathVariable Long itemId,
-                       @RequestHeader("X-Sharer-User-Id") Long userId) {
+                       @RequestHeader(USER_HEADER) Long userId) {
+        log.info("PATCH запрос на обновлением пользователем с id= " + userId + " предмета с id=" + itemId +".");
         userService.checkUserExist(userId);
         return ItemMapper.mapToItemDto(itemService.updateItem(itemUpdate, userId, itemId));
     }
 
     @GetMapping("/{itemId}")
-    public ItemDto getItem(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public ItemDto getItem(@RequestHeader(USER_HEADER) Long userId,
                            @PathVariable Long itemId) {
+        log.info("GET запрос на получение предмета с id=" + itemId + " пользователем с id=" + userId +".");
         return ItemMapper.mapToItemDto(itemService.findItemById(itemId));
     }
 
     @GetMapping
-    public Collection<ItemDto> getItemsOfUser(@RequestHeader("X-Sharer-User-Id") Long userId) {
+    public Collection<ItemDto> getItemsOfUser(@RequestHeader(USER_HEADER) Long userId) {
+        log.info("GET запрос на получение списка предметов пользователя с id=" + userId +".");
         return itemService.findItemsOfUser(userId).stream()
                 .map(ItemMapper::mapToItemDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/search")
-    public List<ItemDto> searchItems(@RequestHeader("X-Sharer-User-Id") Long userId,
+    public List<ItemDto> searchItems(@RequestHeader(USER_HEADER) Long userId,
                                   @RequestParam(name = "text") String text) {
+        log.info("Get запрос на поиск предметов.");
         userService.checkUserExist(userId);
         return itemService.searchItem(userId, text).stream()
                 .map(ItemMapper::mapToItemDto)
