@@ -1,13 +1,14 @@
 package ru.practicum.shareit.item.service;
 
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.User;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 public interface ItemService {
-    Item createItem(Long userId, Item item);
+    Item createItem(User user, Item item);
 
     Item findItemById(Long itemId);
 

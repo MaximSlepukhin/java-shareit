@@ -1,4 +1,4 @@
-package ru.practicum.shareit.user.repository;
+/*package ru.practicum.shareit.user.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.User;
@@ -60,10 +60,13 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findUser(Long userId) {
         Collection<User> users = findAll();
-        Optional<User> user = users.stream()
+        Optional<User> userOptional = users.stream()
                 .filter(user1 -> user1.getId().equals(userId))
                 .findFirst();
-        return user.orElse(null);
+        User user = userOptional.orElse(null);
+        if (user == null) {
+            throw new UserNotFoundException("Пользователь с id=" + userId + "не нвйден");
+        } return user;
     }
 
     @Override
@@ -92,4 +95,4 @@ public class UserRepositoryImpl implements UserRepository {
             throw new UserDuplicateEmailException("Пользователь с email: " + user.getEmail() + " уже существует");
         }
     }
-}
+}*/

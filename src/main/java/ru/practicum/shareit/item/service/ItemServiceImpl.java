@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.user.User;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,8 +18,8 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository repository;
 
     @Override
-    public Item createItem(Long userId, Item item) {
-        item.setOwner(userId);
+    public Item createItem(User user, Item item) {
+        item.setOwner(user);
         var newItem = repository.save(item);
         log.debug("Предмет успешно добавлен.");
         return newItem;

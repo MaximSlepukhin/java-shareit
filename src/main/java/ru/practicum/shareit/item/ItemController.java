@@ -8,6 +8,7 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
@@ -29,20 +30,27 @@ public class ItemController {
     private final ItemService itemService;
     private final UserService userService;
 
-    @PostMapping
+    /*@PostMapping
     public ItemDto save(@RequestHeader(USER_HEADER) Long userId,
                         @Valid @RequestBody ItemDto itemDto) {
         log.info("POST запрос на добавление предмета " + itemDto.getName() + " пользователем с id=" + userId + ".");
-        Item item = ItemMapper.mapToItem(itemDto, userId);
-        userService.checkUserExist(userId);
-        return ItemMapper.mapToItemDto(itemService.createItem(userId, item));
-    }
+        User user = userService.findUserById(userId);
+        Item item = ItemMapper.mapToItem(itemDto, user);
+        return ItemMapper.mapToItemDto(itemService.createItem(user, item));
+    }*/
 
-    @RequestMapping(value = "/{itemId}", method = RequestMethod.PATCH, consumes =
+    /*@PostMapping("/{itemId}/comment")
+    public CommentDto createComment(@RequestHeader(USER_HEADER) Long userId,
+                                    @Valid @RequestBody CommentDto commentDto) {
+        log.info("POST запрос на создание комментария");
+        return null;
+    }*/
+
+    /*@RequestMapping(value = "/{itemId}", method = RequestMethod.PATCH, consumes =
             MediaType.APPLICATION_JSON_VALUE)
     public ItemDto update(@RequestBody Map<String, String> itemUpdate,
-                       @PathVariable Long itemId,
-                       @RequestHeader(USER_HEADER) Long userId) {
+                          @PathVariable Long itemId,
+                          @RequestHeader(USER_HEADER) Long userId) {
         log.info("PATCH запрос на обновлением пользователем с id= " + userId + " предмета с id=" + itemId + ".");
         userService.checkUserExist(userId);
         return ItemMapper.mapToItemDto(itemService.updateItem(itemUpdate, userId, itemId));
@@ -71,5 +79,5 @@ public class ItemController {
         return itemService.searchItem(userId, text).stream()
                 .map(ItemMapper::mapToItemDto)
                 .collect(Collectors.toList());
-    }
+    }*/
 }
