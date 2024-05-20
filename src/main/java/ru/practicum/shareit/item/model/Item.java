@@ -1,8 +1,6 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 
@@ -11,9 +9,14 @@ import javax.persistence.*;
 /**
  * TODO Sprint add-controllers.
  */
-@Data
-@AllArgsConstructor
+
+
 @Entity
+@Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "items")
 public class Item {
 
@@ -41,6 +44,4 @@ public class Item {
     @ToString.Exclude
     private ItemRequest request;
 
-    public Item() {
-    }
 }
