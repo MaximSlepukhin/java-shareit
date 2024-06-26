@@ -46,10 +46,6 @@ public class BookingServiceImpl implements BookingService {
         Item item = itemRepository.findById(bookingDtoOut.getItemId())
                 .orElseThrow(() -> new ItemNotFoundException("Вещь с id=" + bookingDtoOut.getItemId() + " не найдена."));
         if (item.getOwner().getId().equals(userId)) {
-            //исправить
-            //исправить
-            //исправить
-            //исправить
             throw new ItemNotFoundException("");
         }
             Booking booking = BookingMapper.toBooking(item, user, bookingDtoOut);
