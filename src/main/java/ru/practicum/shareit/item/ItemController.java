@@ -26,7 +26,6 @@ public class ItemController {
 
     private final ItemService itemService;
 
-
     @PostMapping
     public ItemDto save(@RequestHeader(Util.USER_HEADER) Long userId,
                         @Valid @RequestBody ItemDto itemDto) {

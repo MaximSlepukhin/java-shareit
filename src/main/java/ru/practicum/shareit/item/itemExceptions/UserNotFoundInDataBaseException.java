@@ -4,4 +4,5 @@ public class UserNotFoundInDataBaseException extends RuntimeException{
     public UserNotFoundInDataBaseException(String message) {
         super(message);
     }
+
 }

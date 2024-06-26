@@ -76,9 +76,4 @@ public class UserServiceImpl implements UserService {
                 .map(UserMapper::toUserDto)
                 .collect(Collectors.toList());
     }
-
-    /*@Override
-    public void checkUserExist(Long userId) {
-        repository.checkUserId(userId);
-    }*/
 }

@@ -10,13 +10,13 @@ import java.util.Collection;
 @Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-
     Collection<Booking> findByBookerIdOrderByStart(Long userId);
 
     Collection<Booking> findByBookerIdAndEndIsBeforeOrderByStart(Long userId, LocalDateTime now);
 
     Collection<Booking> findByBookerIdAndStartIsBeforeAndEndIsAfterOrderByStart(Long userId,
                                                                                 LocalDateTime now, LocalDateTime current);
+
     Collection<Booking> findByBookerIdAndStartIsAfterOrderByStart(Long userId, LocalDateTime now);
 
     Collection<Booking> findByBookerIdAndStatusOrderByStart(Long userId, BookingStatus status);
@@ -26,11 +26,11 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     Collection<Booking> findByItemOwnerIdOrderByStart(Long userId);
 
-
     Collection<Booking> findByItemOwnerIdAndEndIsBeforeOrderByStart(Long userId, LocalDateTime now);
 
     Collection<Booking> findByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByStart(Long userId,
                                                                                 LocalDateTime now, LocalDateTime current);
+
     Collection<Booking> findByItemOwnerIdAndStartIsAfterOrderByStart(Long userId, LocalDateTime now);
 
     Collection<Booking> findByItemOwnerIdAndStatusOrderByStart(Long userId, BookingStatus status);

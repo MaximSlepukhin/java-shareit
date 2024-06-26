@@ -31,4 +31,5 @@ public class ItemDtoOut {
     private BookingForItemDto nextBooking;
 
     private List<CommentDtoOut> comments;
+
 }

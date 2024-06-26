@@ -17,6 +17,4 @@ public interface UserService {
 
     Collection<UserDto> getAllUsers();
 
-    //void checkUserExist(Long userId);
-
 }

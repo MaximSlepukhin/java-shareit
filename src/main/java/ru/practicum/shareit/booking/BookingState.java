@@ -30,4 +30,4 @@ public enum BookingState {
                 "title='" + title + '\'' +
                 "} " + super.toString();
     }
-    }
+}
