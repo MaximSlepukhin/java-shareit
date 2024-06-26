@@ -32,6 +32,7 @@ public class BookingMapper {
                 .status(booking.getStatus())
                 .build();
     }
+
     public static BookingForItemDto toBookingForItemDto(Booking booking) {
         return BookingForItemDto.builder()
                 .id(booking.getId())

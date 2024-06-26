@@ -116,6 +116,7 @@ public class ErrorHandler {
                 e.getMessage()
         );
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBookingDateException(final BookingDateException e) {
@@ -133,6 +134,7 @@ public class ErrorHandler {
                 e.getMessage()
         );
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBookingStatusException(final BookingStatusException e) {
