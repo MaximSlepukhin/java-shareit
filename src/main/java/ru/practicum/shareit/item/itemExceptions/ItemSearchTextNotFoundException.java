@@ -4,4 +4,5 @@ public class ItemSearchTextNotFoundException extends RuntimeException {
     public ItemSearchTextNotFoundException(String message) {
         super(message);
     }
+
 }

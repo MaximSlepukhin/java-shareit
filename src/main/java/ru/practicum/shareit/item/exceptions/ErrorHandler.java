@@ -1,14 +1,15 @@
-package ru.practicum.shareit.exceptions;
+package ru.practicum.shareit.item.exceptions;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.item.itemExceptions.ItemNotBelongUserException;
-import ru.practicum.shareit.item.itemExceptions.ItemNotContainFieldException;
-import ru.practicum.shareit.item.itemExceptions.ItemNotFoundException;
-import ru.practicum.shareit.item.itemExceptions.ItemSearchTextNotFoundException;
+import ru.practicum.shareit.booking.bookingExceptions.BookingNotFoundException;
+import ru.practicum.shareit.booking.exceptions.BookingDateException;
+import ru.practicum.shareit.booking.exceptions.BookingStatusException;
+import ru.practicum.shareit.booking.exceptions.StateNotFoundException;
+import ru.practicum.shareit.item.itemExceptions.*;
 import ru.practicum.shareit.user.userExceptions.UserDuplicateEmailException;
 import ru.practicum.shareit.user.userExceptions.UserEmailNotFoundException;
 import ru.practicum.shareit.user.userExceptions.UserNotFoundException;
@@ -20,6 +21,15 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleUserEmailNotFoundException(final UserEmailNotFoundException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleItemIsNotAvailableException(final ItemIsNotAvailableException e) {
         log.error(e.getMessage());
         return new ErrorResponse(
                 e.getMessage()
@@ -74,6 +84,60 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleItemSearchTextNotFoundException(final ItemSearchTextNotFoundException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleBookingNotFoundException(final BookingNotFoundException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleNotFoundException(final NotFoundException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleUserNotFoundInDataBaseException(final UserNotFoundInDataBaseException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBookingDateException(final BookingDateException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleStateNotFoundException(final StateNotFoundException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBookingStatusException(final BookingStatusException e) {
         log.error(e.getMessage());
         return new ErrorResponse(
                 e.getMessage()

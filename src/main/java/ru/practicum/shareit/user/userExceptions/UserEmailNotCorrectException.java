@@ -4,5 +4,6 @@ public class UserEmailNotCorrectException extends RuntimeException {
     public UserEmailNotCorrectException(String message) {
         super(message);
     }
+
 }
 
