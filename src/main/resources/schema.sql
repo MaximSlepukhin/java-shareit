@@ -11,7 +11,6 @@ CREATE INDEX idx_users_name ON users (name);
 
 
 
-
 CREATE TABLE IF NOT EXISTS requests (
 id              BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
 description     VARCHAR(500),
