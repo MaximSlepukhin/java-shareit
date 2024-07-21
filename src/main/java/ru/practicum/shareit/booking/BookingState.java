@@ -1,14 +1,22 @@
 package ru.practicum.shareit.booking;
 
-public enum BookingStatus {
-    WAITING("Новое бронирование, ожидает одобрения."),
-    APPROVED("Бронирование подтверждено владельцем."),
-    REJECTED("Бронирование отклонено владельцем."),
+public enum BookingState {
 
-    CANCELED("Бронирвоание отменено создателем.");
+    ALL("Все бронирования"),
+
+    CURRENT("Текущее бронирования"),
+
+    PAST("Завершенные бронирования"),
+
+    FUTURE("Будущие бронирования"),
+
+    WAITING("Новое бронирование, ожидает одобрения."),
+
+    REJECTED("Бронирование отклонено владельцем.");
+
     private final String title;
 
-    BookingStatus(String title) {
+    BookingState(String title) {
         this.title = title;
     }
 
