@@ -40,7 +40,7 @@ public class RequestServiceImpl implements RequestService {
                 .orElseThrow(() -> new UserNotFoundException("Пользователь с id=" + userId + " не найден."));
         var now = LocalDateTime.now();
         ItemRequest itemRequest = ItemRequestMapper.mapToItemRequest(itemRequestDto, user, now);
-        requestRepository.save(itemRequest);
+        itemRequest = requestRepository.save(itemRequest);
         return ItemRequestMapper.mapToItemRequestDtoOut(itemRequest);
     }
 

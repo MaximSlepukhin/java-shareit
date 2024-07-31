@@ -113,8 +113,6 @@ public class ItemServiceImplTest {
 
     Pageable pageable = PageRequest.of(1, 20);
 
-
-
     static Map<String, String> mapForItemUpdate = new HashMap<>();
 
     @BeforeAll
@@ -123,7 +121,7 @@ public class ItemServiceImplTest {
         mapForItemUpdate.put("description", "Аккумуляторная дрель");
         mapForItemUpdate.put("available", "false");
     }
-    //+
+
     @Test
     void shouldCreateItemWithoutRequest() {
         when(userRepository.findById(1L))
@@ -135,7 +133,7 @@ public class ItemServiceImplTest {
 
         Assertions.assertEquals(result, ItemMapper.mapToItemDto(firstItemFromRepository));
     }
-    //+
+
     @Test
     void createItemWithItemRequest() {
         when(userRepository.findById(1L))
@@ -149,7 +147,7 @@ public class ItemServiceImplTest {
 
         Assertions.assertEquals(result, ItemMapper.mapToItemDto(secondItemFromRepository));
     }
-    //+
+
     @Test
     void shouldCreateItemShouldThrowExceptionWithNotValidRequest() {
         when(userRepository.findById(1L))
@@ -162,7 +160,7 @@ public class ItemServiceImplTest {
                 () -> itemServiceImpl.createItem(1L, secondItemDto));
         Assertions.assertEquals(exception.getMessage(), "Запрос с id=1 не найден.");
     }
-    //+-
+
     @Test
     void shouldFindItemById() {
         when(userRepository.findById(1L))
@@ -181,7 +179,7 @@ public class ItemServiceImplTest {
         Assertions.assertEquals(result.getName(), itemDtoOut.getName());
         Assertions.assertEquals(result.getDescription(), itemDtoOut.getDescription());
     }
-    //+
+
     @Test
     void shouldUpdateItem() {
         when(itemRepository.findById(1L))
@@ -193,7 +191,7 @@ public class ItemServiceImplTest {
 
         Assertions.assertEquals(result, itemDtoAfterUpdate);
     }
-    //+
+
     @Test
     void shouldSearchItem() {
         Page<Item> itemsPage = new PageImpl<>(listOfItemsByRequest);
@@ -206,14 +204,14 @@ public class ItemServiceImplTest {
 
         Assertions.assertEquals(result, listOfItemsDto);
     }
-    //+
+
     @Test
     void shouldNotSearchItemWhenTextIsEmpty() {
         List<ItemDto> result = itemServiceImpl.searchItem(2L, "", pageable);
 
         Assertions.assertEquals(result.size(), 0);
     }
-    //+-
+
     @Test
     void shouldAddComment() {
         when(userRepository.findById(2L))
@@ -231,7 +229,7 @@ public class ItemServiceImplTest {
         Assertions.assertEquals(result.getText(), commentDtoOutOfFirstUser.getText());
 
     }
-    //+-
+
     @Test
     void shouldFindItemsOfUser() {
         when(userRepository.findById(1L))

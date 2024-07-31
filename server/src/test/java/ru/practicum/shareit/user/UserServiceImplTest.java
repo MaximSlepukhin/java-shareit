@@ -58,7 +58,7 @@ public class UserServiceImplTest {
     static void createMapWithName() {
         mapForNameUpdate.put("name", "user1");
     }
-    //+
+
     @Test
     void shouldCreateUser() {
         when(userRepository.save(newUser))
@@ -68,7 +68,7 @@ public class UserServiceImplTest {
 
         Assertions.assertEquals(result,userDtoOut);
     }
-    //+
+
     @Test
     void shouldUpdateEmailOfUser() {
         when(userRepository.findById(1L))
@@ -78,7 +78,7 @@ public class UserServiceImplTest {
 
         Assertions.assertEquals(result, userEmailUpdate);
     }
-    //+
+
     @Test
     void shouldUpdateNameOfUser() {
         when(userRepository.findById(1L))
@@ -88,7 +88,7 @@ public class UserServiceImplTest {
 
         Assertions.assertEquals(result, userNameUpdate);
     }
-    //+-
+
     @Test
     void shouldFindUserById() {
         when(userRepository.findById(1L))
@@ -100,14 +100,14 @@ public class UserServiceImplTest {
         Assertions.assertEquals(result.getName(), userFromRepository.getName());
         Assertions.assertEquals(result.getEmail(), userFromRepository.getEmail());
     }
-    //+
+
     @Test
     void shouldDeleteUserById() {
         userServiceImpl.deleteUserById(1L);
 
         verify(userRepository, times(1)).deleteById(1L);
     }
-    //+
+
     @Test
     void shouldGetAllUsers() {
         when(userRepository.findAll())

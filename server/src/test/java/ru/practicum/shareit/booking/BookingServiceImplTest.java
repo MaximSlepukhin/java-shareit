@@ -13,9 +13,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
+import ru.practicum.shareit.booking.exceptions.BookingStatusException;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.service.BookingServiceImpl;
+import ru.practicum.shareit.item.itemExceptions.ItemIsNotAvailableException;
+import ru.practicum.shareit.item.itemExceptions.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.ItemRequest;
@@ -70,12 +73,20 @@ public class BookingServiceImplTest {
             .created(created).build();
     Item item = Item.builder().id(1L).name("Дрель").description("Простая дрель").available(true).owner(owner)
             .request(itemRequest).build();
+    Item itemWithFalseStatus = Item.builder().id(1L).name("Дрель").description("Простая дрель").available(false)
+            .owner(owner).request(itemRequest).build();
 
     BookingDtoRequest bookingDtoRequest = BookingDtoRequest.builder().itemId(1L).start(start).end(end).build();
     Booking bookingToRepository = Booking.builder().start(start).end(end).item(item).booker(booker)
             .status(BookingStatus.WAITING).build();
     Booking bookingFromRepository = Booking.builder().id(1L).start(start).end(end).item(item).booker(booker)
             .status(BookingStatus.WAITING).build();
+
+    Booking bookingWithApprovedStatus = Booking.builder().id(1L).start(start).end(end).item(item).booker(booker)
+            .status(BookingStatus.APPROVED).build();
+
+    Booking bookingWithCanceledStatus = Booking.builder().id(1L).start(start).end(end).item(item).booker(booker)
+            .status(BookingStatus.CANCELED).build();
     Booking bookingApproved = Booking.builder().id(1L).start(start).end(end).item(item).booker(booker)
             .status(BookingStatus.APPROVED).build();
     BookingDto bookingDto = BookingMapper.toBookingDto(bookingFromRepository);
@@ -85,8 +96,6 @@ public class BookingServiceImplTest {
     List<Booking> listOfBookings = List.of(bookingFromRepository);
     Pageable pageable = PageRequest.of(1, 20);
 
-
-    //+
     @Test
     void shouldAddBooking() {
         when(userRepository.findById(2L))
@@ -102,9 +111,34 @@ public class BookingServiceImplTest {
 
     }
 
-    //+
     @Test
-    void shouldUpdateStatusOfBookingTest() {
+    void shouldNotAddBookingIfOwnerIdIsEquilUserId() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        when(itemRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(item));
+
+        NotFoundException exception = Assertions.assertThrows(
+                NotFoundException.class,
+                () -> bookingServiceImpl.add(1L, bookingDtoRequest));
+        Assertions.assertEquals(exception.getMessage(), "Бронирование не возможно.");
+    }
+
+    @Test
+    void shouldNotAddBookingIfStatusOfBookingIsFalse() {
+        when(userRepository.findById(2L))
+                .thenReturn(Optional.ofNullable(booker));
+        when(itemRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(itemWithFalseStatus));
+
+        ItemIsNotAvailableException exception = Assertions.assertThrows(
+                ItemIsNotAvailableException.class,
+                () -> bookingServiceImpl.add(2L, bookingDtoRequest));
+        Assertions.assertEquals(exception.getMessage(), "Бронирование не возможно.");
+    }
+
+    @Test
+    void shouldUpdateStatusOfBooking() {
         when(userRepository.findById(1L))
                 .thenReturn(Optional.ofNullable(owner));
         when(bookingRepository.findById(1L))
@@ -117,7 +151,30 @@ public class BookingServiceImplTest {
         Assertions.assertEquals(result, bookingApprovedDto);
     }
 
-    //+
+    @Test
+    void shouldNotUpdateStatusOfBookingIfStatusApproved() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        when(bookingRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(bookingWithApprovedStatus));
+
+        BookingStatusException exception = Assertions.assertThrows(
+                BookingStatusException.class,
+                () -> bookingServiceImpl.updateStatus(1L, 1L,true));
+        Assertions.assertEquals(exception.getMessage(), "Бронирование имеет статус.");
+    }
+
+    void shouldNotUpdateStatusOfBookingIfStatusCanceled() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        when(bookingRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(bookingWithCanceledStatus));
+
+        BookingStatusException exception = Assertions.assertThrows(
+                BookingStatusException.class,
+                () -> bookingServiceImpl.updateStatus(1L, 1L,true));
+        Assertions.assertEquals(exception.getMessage(), "Бронирование имеет статус.");
+    }
     @Test
     void shouldFindBookingById() {
         when(bookingRepository.findById(1L))
@@ -127,7 +184,7 @@ public class BookingServiceImplTest {
 
         Assertions.assertEquals(result, bookingDto);
     }
-    //+
+
     @Test
     void shouldGetAllBookingsOfOwner() {
         when(userRepository.findById(1L))
