@@ -67,7 +67,7 @@ public class ItemRequestControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .header(Util.USER_HEADER, "1"))
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(itemRequestDtoOut)));
     }
 
