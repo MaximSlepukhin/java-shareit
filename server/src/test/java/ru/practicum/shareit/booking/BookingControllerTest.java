@@ -96,7 +96,7 @@ public class BookingControllerTest {
     void getAllBookings() throws Exception {
         when(bookingService.getAllBookingsOfUser(1L,"ALL",pageable))
                 .thenReturn(listOfBookings);
-        mockMvc.perform(get("/bookings" )
+        mockMvc.perform(get("/bookings")
                         .header(Util.USER_HEADER, 1)
                         .param("from", "0")
                         .param("size", "20")
@@ -109,7 +109,7 @@ public class BookingControllerTest {
     void findAllBookingsOfOwner() throws Exception {
         when(bookingService.findBookingsOfOwnerById(1L,"ALL",pageable))
                 .thenReturn(listOfBookings);
-        mockMvc.perform(get("/bookings/owner" )
+        mockMvc.perform(get("/bookings/owner")
                         .header(Util.USER_HEADER, 1)
                         .param("from", "0")
                         .param("size", "20")

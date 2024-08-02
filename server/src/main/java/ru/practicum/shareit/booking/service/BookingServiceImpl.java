@@ -115,8 +115,8 @@ public class BookingServiceImpl implements BookingService {
                         now, pageable).getContent();
                 break;
             case CURRENT:
-                bookings = bookingRepository.
-                        findByBookerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(userId, now, now, pageable)
+                bookings = bookingRepository
+                        .findByBookerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(userId, now, now, pageable)
                         .getContent();
                 break;
             case FUTURE:

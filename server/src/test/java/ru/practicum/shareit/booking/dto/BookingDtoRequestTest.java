@@ -20,7 +20,7 @@ public class BookingDtoRequestTest {
     @Test
     void testSerialize() throws Exception {
         BookingDtoRequest bookingDtoRequest = BookingDtoRequest.builder()
-                .itemId(1l)
+                .itemId(1L)
                 .start(LocalDateTime.now())
                 .end(LocalDateTime.now().plusDays(3))
                 .build();

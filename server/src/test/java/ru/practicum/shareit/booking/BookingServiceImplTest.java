@@ -175,6 +175,7 @@ public class BookingServiceImplTest {
                 () -> bookingServiceImpl.updateStatus(1L, 1L,true));
         Assertions.assertEquals(exception.getMessage(), "Бронирование имеет статус.");
     }
+
     @Test
     void shouldFindBookingById() {
         when(bookingRepository.findById(1L))
@@ -204,7 +205,7 @@ public class BookingServiceImplTest {
         when(userRepository.findById(1L))
                 .thenReturn(Optional.ofNullable(owner));
         Page<Booking> bookingPage = new PageImpl<>(listOfBookings);
-        when(bookingRepository.findByItemOwnerIdOrderByStartDesc(1l, pageable))
+        when(bookingRepository.findByItemOwnerIdOrderByStartDesc(1L, pageable))
                 .thenReturn(bookingPage);
 
         List<BookingDto> result = bookingServiceImpl.findBookingsOfOwnerById(1L,"ALL",pageable);

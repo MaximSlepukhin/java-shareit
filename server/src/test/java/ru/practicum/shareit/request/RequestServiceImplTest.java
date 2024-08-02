@@ -54,12 +54,12 @@ public class RequestServiceImplTest {
     ItemRequestDto itemRequestDtoFirst = ItemRequestDto.builder()
             .description("Хотел бы воспользоваться дрелью").build();
 
-    ItemRequest itemRequestFirstFromRepository = ItemRequest.builder().id(1L).
-            description("Хотел бы воспользоваться дрелью").requester(requester).created(created).build();
+    ItemRequest itemRequestFirstFromRepository = ItemRequest.builder().id(1L)
+            .description("Хотел бы воспользоваться дрелью").requester(requester).created(created).build();
 
     ItemRequestDtoOut itemRequestDtoFirstOut = ItemRequestMapper.mapToItemRequestDtoOut(itemRequestFirstFromRepository);
-    ItemDto itemDto = ItemDto.builder().id(1L).name("Дрель").description("Аккумулятораня дрель").available(true).
-            requestId(1L).build();
+    ItemDto itemDto = ItemDto.builder().id(1L).name("Дрель").description("Аккумулятораня дрель").available(true)
+            .requestId(1L).build();
     Item item = Item.builder().id(1L).name("Дрель").description("Аккумулятораня дрель").available(true)
             .owner(owner).request(itemRequestFirstFromRepository).build();
 
@@ -128,6 +128,6 @@ public class RequestServiceImplTest {
 
         ItemRequestDto result = requestServiceImpl.getRequestById(3L, 1L);
 
-        Assertions.assertEquals(result, itemRequestDtoForList );
+        Assertions.assertEquals(result, itemRequestDtoForList);
     }
 }

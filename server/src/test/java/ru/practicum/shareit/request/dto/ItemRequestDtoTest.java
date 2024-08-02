@@ -22,7 +22,7 @@ public class ItemRequestDtoTest {
     void testSerialize() throws Exception {
 
         ItemRequestDto itemRequestDto = new ItemRequestDto();
-        itemRequestDto.setId(1l);
+        itemRequestDto.setId(1L);
         itemRequestDto.setDescription("Description");
         itemRequestDto.setCreated(LocalDateTime.now());
         itemRequestDto.setItems(new ArrayList<>());
