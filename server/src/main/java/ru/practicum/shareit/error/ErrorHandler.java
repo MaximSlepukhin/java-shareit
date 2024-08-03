@@ -10,22 +10,11 @@ import ru.practicum.shareit.booking.exceptions.BookingNotFoundException;
 import ru.practicum.shareit.booking.exceptions.BookingStatusException;
 import ru.practicum.shareit.booking.exceptions.StateNotFoundException;
 import ru.practicum.shareit.item.itemExceptions.*;
-import ru.practicum.shareit.user.userExceptions.UserDuplicateEmailException;
-import ru.practicum.shareit.user.userExceptions.UserEmailNotFoundException;
 import ru.practicum.shareit.user.userExceptions.UserNotFoundException;
 
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler {
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleUserEmailNotFoundException(final UserEmailNotFoundException e) {
-        log.error(e.getMessage());
-        return new ErrorResponse(
-                e.getMessage()
-        );
-    }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -39,15 +28,6 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleUserNotFoundException(final UserNotFoundException e) {
-        log.error(e.getMessage());
-        return new ErrorResponse(
-                e.getMessage()
-        );
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleUserDuplicateEmailException(final UserDuplicateEmailException e) {
         log.error(e.getMessage());
         return new ErrorResponse(
                 e.getMessage()
@@ -102,15 +82,6 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(final NotFoundException e) {
-        log.error(e.getMessage());
-        return new ErrorResponse(
-                e.getMessage()
-        );
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse handleUserNotFoundInDataBaseException(final UserNotFoundInDataBaseException e) {
         log.error(e.getMessage());
         return new ErrorResponse(
                 e.getMessage()

@@ -7,9 +7,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.practicum.shareit.item.itemExceptions.ItemIsNotAvailableException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserServiceImpl;
+import ru.practicum.shareit.user.userExceptions.UserNotFoundException;
 
 import java.util.*;
 
@@ -26,6 +28,8 @@ public class UserServiceImplTest {
     UserDto userDto = UserDto.builder().name("User1").email("user1@mail.ru").build();
 
     UserDto userDtoOut = new UserDto(1L, "User1", "user1@mail.ru");
+
+    User userNotFound = new User(11L,"User11","user11@mail.ru");
 
     User newUser = User.builder().name("User1").email("user1@mail.ru").build();
 
@@ -77,6 +81,14 @@ public class UserServiceImplTest {
         UserDto result = userServiceImpl.updateUser(mapForEmailUpdate, 1L);
 
         Assertions.assertEquals(result, userEmailUpdate);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUserNotFound() {
+        UserNotFoundException exception = Assertions.assertThrows(
+                UserNotFoundException.class,
+                () -> userServiceImpl.updateUser(mapForEmailUpdate,11L));
+        Assertions.assertEquals(exception.getMessage(), "Пользователь с id=11 не найден.");
     }
 
     @Test
