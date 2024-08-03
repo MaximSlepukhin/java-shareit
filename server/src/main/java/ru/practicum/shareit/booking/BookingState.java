@@ -1,5 +1,8 @@
 package ru.practicum.shareit.booking;
 
+import lombok.ToString;
+
+@ToString
 public enum BookingState {
     ALL("Все бронирования"),
     CURRENT("Текущее бронирования"),
@@ -16,12 +19,5 @@ public enum BookingState {
 
     public String getTitle() {
         return title;
-    }
-
-    @Override
-    public String toString() {
-        return "BookingStatus{" +
-                "title='" + title + '\'' +
-                "} " + super.toString();
     }
 }

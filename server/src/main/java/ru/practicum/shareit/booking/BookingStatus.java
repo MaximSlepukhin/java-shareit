@@ -1,5 +1,8 @@
 package ru.practicum.shareit.booking;
 
+import lombok.ToString;
+
+@ToString
 public enum BookingStatus {
     WAITING("Новое бронирование, ожидает одобрения."),
     APPROVED("Бронирование подтверждено владельцем."),
@@ -14,12 +17,5 @@ public enum BookingStatus {
 
     public String getTitle() {
         return title;
-    }
-
-    @Override
-    public String toString() {
-        return "BookingStatus{" +
-                "title='" + title + '\'' +
-                "} " + super.toString();
     }
 }
