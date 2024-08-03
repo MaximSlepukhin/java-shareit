@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.exceptions.BookingDateException;
+import ru.practicum.shareit.booking.exceptions.BookingNotFoundException;
 import ru.practicum.shareit.booking.exceptions.BookingStatusException;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -25,11 +26,14 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.userExceptions.UserNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -222,5 +226,13 @@ public class BookingServiceImplTest {
         List<BookingDto> result = bookingServiceImpl.findBookingsOfOwnerById(1L,"ALL",pageable);
 
         Assertions.assertEquals(result, listOfBookingsDto);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenBookingNotFound() {
+        BookingNotFoundException exception = Assertions.assertThrows(
+                BookingNotFoundException.class,
+                () -> bookingServiceImpl.findBookingById(1L,11L));
+        Assertions.assertEquals(exception.getMessage(), "Бронирование с id: 11 не существует.");
     }
 }
