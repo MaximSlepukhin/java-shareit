@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
+import ru.practicum.shareit.booking.exceptions.BookingDateException;
 import ru.practicum.shareit.booking.exceptions.BookingStatusException;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -77,6 +78,8 @@ public class BookingServiceImplTest {
             .owner(owner).request(itemRequest).build();
 
     BookingDtoRequest bookingDtoRequest = BookingDtoRequest.builder().itemId(1L).start(start).end(end).build();
+    BookingDtoRequest bookingWithWrongDates = BookingDtoRequest.builder().itemId(1L)
+            .start(LocalDateTime.now().plusDays(3)).end(LocalDateTime.now().plusDays(1)).build();
     Booking bookingToRepository = Booking.builder().start(start).end(end).item(item).booker(booker)
             .status(BookingStatus.WAITING).build();
     Booking bookingFromRepository = Booking.builder().id(1L).start(start).end(end).item(item).booker(booker)
@@ -122,6 +125,14 @@ public class BookingServiceImplTest {
                 NotFoundException.class,
                 () -> bookingServiceImpl.add(1L, bookingDtoRequest));
         Assertions.assertEquals(exception.getMessage(), "Бронирование не возможно.");
+    }
+
+    @Test
+    void shouldNotAddBookingIfDatesAreWrong() {
+        BookingDateException exception = Assertions.assertThrows(
+                BookingDateException.class,
+                () -> bookingServiceImpl.add(1L, bookingWithWrongDates));
+        Assertions.assertEquals(exception.getMessage(), "Некорректно заданы даты бронирования.");
     }
 
     @Test
