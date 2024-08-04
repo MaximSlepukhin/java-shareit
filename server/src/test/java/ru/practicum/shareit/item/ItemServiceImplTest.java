@@ -33,7 +33,6 @@ import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
-import ru.practicum.shareit.user.userExceptions.UserNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.*;
