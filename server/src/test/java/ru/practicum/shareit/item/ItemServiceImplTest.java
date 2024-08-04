@@ -20,6 +20,7 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentDtoOut;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoOut;
+import ru.practicum.shareit.item.itemExceptions.ItemNotFoundException;
 import ru.practicum.shareit.item.itemExceptions.NotFoundException;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
@@ -32,6 +33,7 @@ import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.userExceptions.UserNotFoundException;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -245,5 +247,18 @@ public class ItemServiceImplTest {
         List<ItemDtoOut> result = itemServiceImpl.findItemsOfUser(1L, pageable);
 
         Assertions.assertEquals(result.size(), listOfItemsDtoOut.size());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenItemNotFound() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        when(itemRepository.findById(11L))
+                .thenReturn(Optional.empty());
+
+        ItemNotFoundException exception = Assertions.assertThrows(
+                ItemNotFoundException.class,
+                () -> itemServiceImpl.findItemById(11L,1L,pageable));
+        Assertions.assertEquals(exception.getMessage(), "Предмет с id=11 не найден.");
     }
 }

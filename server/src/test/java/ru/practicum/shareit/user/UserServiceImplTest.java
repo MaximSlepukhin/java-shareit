@@ -84,9 +84,12 @@ public class UserServiceImplTest {
 
     @Test
     void shouldThrowExceptionWhenUserNotFound() {
+        when(userRepository.findById(11L))
+                .thenReturn(Optional.empty());
+
         UserNotFoundException exception = Assertions.assertThrows(
                 UserNotFoundException.class,
-                () -> userServiceImpl.updateUser(mapForEmailUpdate,11L));
+                () -> userServiceImpl.updateUser(mapForEmailUpdate, 11L));
         Assertions.assertEquals(exception.getMessage(), "Пользователь с id=11 не найден.");
     }
 

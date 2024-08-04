@@ -364,6 +364,9 @@ public class BookingServiceImplTest {
 
     @Test
     void shouldThrowExceptionWhenBookingNotFound() {
+        when(bookingRepository.findById(11L))
+                .thenReturn(Optional.empty());
+
         BookingNotFoundException exception = Assertions.assertThrows(
                 BookingNotFoundException.class,
                 () -> bookingServiceImpl.findBookingById(1L,11L));
