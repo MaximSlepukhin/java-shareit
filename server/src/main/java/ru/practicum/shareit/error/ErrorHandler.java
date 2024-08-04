@@ -1,6 +1,7 @@
 package ru.practicum.shareit.error;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -11,6 +12,7 @@ import ru.practicum.shareit.booking.exceptions.BookingStatusException;
 import ru.practicum.shareit.booking.exceptions.StateNotFoundException;
 import ru.practicum.shareit.item.itemExceptions.*;
 import ru.practicum.shareit.user.userExceptions.UserEmailException;
+import ru.practicum.shareit.user.userExceptions.UserIsNotOwnerException;
 import ru.practicum.shareit.user.userExceptions.UserNotFoundException;
 
 @Slf4j
@@ -92,6 +94,24 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleUserEmailException(final UserEmailException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleUserEmailException(final DataIntegrityViolationException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleUserEmailException(final UserIsNotOwnerException e) {
         log.error(e.getMessage());
         return new ErrorResponse(
                 e.getMessage()

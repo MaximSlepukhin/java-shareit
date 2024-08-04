@@ -21,6 +21,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.userExceptions.UserIsNotOwnerException;
 import ru.practicum.shareit.user.userExceptions.UserNotFoundException;
 
 import java.time.LocalDateTime;
@@ -68,7 +69,7 @@ public class BookingServiceImpl implements BookingService {
         }
         var ownerId = booking.getItem().getOwner().getId();
         if (!ownerId.equals(userId)) {
-            throw new UserNotFoundException("Пользователь с id: " + userId + " не является владельцем вещи.");
+            throw new UserIsNotOwnerException("Пользователь с id: " + userId + " не является владельцем вещи.");
         } else {
             if (approved) {
                 booking.setStatus(BookingStatus.APPROVED);
