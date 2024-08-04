@@ -16,6 +16,7 @@ import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.exceptions.BookingDateException;
 import ru.practicum.shareit.booking.exceptions.BookingNotFoundException;
 import ru.practicum.shareit.booking.exceptions.BookingStatusException;
+import ru.practicum.shareit.booking.exceptions.StateNotFoundException;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.service.BookingServiceImpl;
@@ -367,5 +368,16 @@ public class BookingServiceImplTest {
                 BookingNotFoundException.class,
                 () -> bookingServiceImpl.findBookingById(1L,11L));
         Assertions.assertEquals(exception.getMessage(), "Бронирование с id: 11 не существует.");
+    }
+
+    @Test
+    void shouldThrowExceptionWhenBookingStateIsUnknown() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+
+        StateNotFoundException exception = Assertions.assertThrows(
+                StateNotFoundException.class,
+                () -> bookingServiceImpl.findBookingsOfOwnerById(1L,"UNKNOWNSTATE",pageable));
+        Assertions.assertEquals(exception.getMessage(), "Unknown state: UNKNOWNSTATE");
     }
 }
