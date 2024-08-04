@@ -31,6 +31,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -176,18 +178,6 @@ public class BookingServiceImplTest {
         Assertions.assertEquals(exception.getMessage(), "Бронирование имеет статус.");
     }
 
-    void shouldNotUpdateStatusOfBookingIfStatusCanceled() {
-        when(userRepository.findById(1L))
-                .thenReturn(Optional.ofNullable(owner));
-        when(bookingRepository.findById(1L))
-                .thenReturn(Optional.ofNullable(bookingWithCanceledStatus));
-
-        BookingStatusException exception = Assertions.assertThrows(
-                BookingStatusException.class,
-                () -> bookingServiceImpl.updateStatus(1L, 1L,true));
-        Assertions.assertEquals(exception.getMessage(), "Бронирование имеет статус.");
-    }
-
     @Test
     void shouldFindBookingById() {
         when(bookingRepository.findById(1L))
@@ -199,7 +189,7 @@ public class BookingServiceImplTest {
     }
 
     @Test
-    void shouldGetAllBookingsOfOwner() {
+    void shouldGetAllBookingsOfUser() {
         when(userRepository.findById(1L))
                 .thenReturn(Optional.ofNullable(owner));
         Page<Booking> bookingPage = new PageImpl<>(listOfBookings);
@@ -213,6 +203,93 @@ public class BookingServiceImplTest {
     }
 
     @Test
+    void shouldGetAllBookingsOfUserWhenStateIsPast() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        Page<Booking> bookingPage = new PageImpl<>(listOfBookings);
+        when(bookingRepository.findByBookerIdAndEndIsBeforeOrderByStartDesc(anyLong(),
+                any(LocalDateTime.class), any(Pageable.class)))
+                .thenReturn(bookingPage);
+
+        List<BookingDto> result = bookingServiceImpl.getAllBookingsOfUser(1L,
+                "PAST", pageable);
+
+        Assertions.assertEquals(result, listOfBookingsDto);
+    }
+
+    @Test
+    void shouldGetAllBookingsOfUserWhenStateIsCurrent() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        Page<Booking> bookingPage = new PageImpl<>(listOfBookings);
+        when(bookingRepository
+                .findByBookerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(anyLong(), any(LocalDateTime.class),
+                        any(LocalDateTime.class), any(Pageable.class)))
+                .thenReturn(bookingPage);
+
+        List<BookingDto> result = bookingServiceImpl.getAllBookingsOfUser(1L,
+                "CURRENT", pageable);
+
+        Assertions.assertEquals(result, listOfBookingsDto);
+    }
+
+    @Test
+    void shouldGetAllBookingsOfUserWhenStateIsFuture() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        Page<Booking> bookingPage = new PageImpl<>(listOfBookings);
+        when(bookingRepository.findByBookerIdAndStartIsAfterOrderByStartDesc(anyLong(), any(LocalDateTime.class),
+                any(Pageable.class)))
+                .thenReturn(bookingPage);
+
+        List<BookingDto> result = bookingServiceImpl.getAllBookingsOfUser(1L,
+                "FUTURE", pageable);
+
+        Assertions.assertEquals(result, listOfBookingsDto);
+    }
+
+    @Test
+    void shouldFindBookingsOfOwnerByIdWhenStateIsPast() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        Page<Booking> bookingPage = new PageImpl<>(listOfBookings);
+        when(bookingRepository.findByItemOwnerIdAndEndIsBeforeOrderByStartDesc(anyLong(), any(LocalDateTime.class),
+                any(Pageable.class)))
+                .thenReturn(bookingPage);
+
+        List<BookingDto> result = bookingServiceImpl.findBookingsOfOwnerById(1L, "PAST", pageable);
+
+        Assertions.assertEquals(result, listOfBookingsDto);
+    }
+
+    @Test
+    void shouldFindBookingsOfOwnerByIdWhenStateIsCurrent() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        Page<Booking> bookingPage = new PageImpl<>(listOfBookings);
+        when(bookingRepository.findByItemOwnerIdAndStartIsBeforeAndEndIsAfterOrderByStartDesc(anyLong(),
+                any(LocalDateTime.class), any(LocalDateTime.class), any(Pageable.class)))
+                .thenReturn(bookingPage);
+
+        List<BookingDto> result = bookingServiceImpl.findBookingsOfOwnerById(1L, "CURRENT", pageable);
+
+        Assertions.assertEquals(result, listOfBookingsDto);
+    }
+
+    @Test
+    void shouldFindBookingsOfOwnerByIdWhenStateIsFuture() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        Page<Booking> bookingPage = new PageImpl<>(listOfBookings);
+        when(bookingRepository.findByItemOwnerIdAndStartIsAfterOrderByStart(anyLong(), any(LocalDateTime.class),
+                any(Pageable.class)))
+                .thenReturn(bookingPage);
+
+        List<BookingDto> result = bookingServiceImpl.findBookingsOfOwnerById(1L, "FUTURE", pageable);
+
+        Assertions.assertEquals(result, listOfBookingsDto);
+    }
+    @Test
     void shouldFindBookingsOfOwnerById() {
         when(userRepository.findById(1L))
                 .thenReturn(Optional.ofNullable(owner));
@@ -220,7 +297,7 @@ public class BookingServiceImplTest {
         when(bookingRepository.findByItemOwnerIdOrderByStartDesc(1L, pageable))
                 .thenReturn(bookingPage);
 
-        List<BookingDto> result = bookingServiceImpl.findBookingsOfOwnerById(1L,"ALL",pageable);
+        List<BookingDto> result = bookingServiceImpl.findBookingsOfOwnerById(1L, "ALL", pageable);
 
         Assertions.assertEquals(result, listOfBookingsDto);
     }
