@@ -25,14 +25,14 @@ public class BookingController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BookingDto create(@RequestHeader(Util.USER_HEADER) Long userId,
+    public BookingDto create(@RequestHeader("X-Sharer-User-Id") Long userId,
                              @RequestBody BookingDtoRequest bookingDtoRequest) {
         log.info("POST запрос на новое бронирование от пользователя с id:{}", userId);
         return bookingService.add(userId, bookingDtoRequest);
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDto updateStatus(@RequestHeader(Util.USER_HEADER) Long userId,
+    public BookingDto updateStatus(@RequestHeader("X-Sharer-User-Id") Long userId,
                                    @PathVariable Long bookingId,
                                    @RequestParam boolean approved) {
         log.info("PATCH запрос на обновление статуса о бронирвоании от пользователя с id:{}", userId);
@@ -47,7 +47,7 @@ public class BookingController {
     }
 
     @GetMapping
-    List<BookingDto> getAllBookingsOfUser(@RequestHeader(Util.USER_HEADER) Long userId,
+    List<BookingDto> getAllBookingsOfUser(@RequestHeader("X-Sharer-User-Id") Long userId,
                                            @RequestParam(defaultValue = "ALL") String state,
                                            @RequestParam(value = "from", required = false,
                                                    defaultValue = "0") Integer from,
@@ -60,7 +60,7 @@ public class BookingController {
     }
 
     @GetMapping("/owner")
-    List<BookingDto> findAllBookingsOfOwner(@RequestHeader(Util.USER_HEADER) Long ownerId,
+    List<BookingDto> findAllBookingsOfOwner(@RequestHeader("X-Sharer-User-Id") Long ownerId,
                                             @RequestParam(defaultValue = "ALL") String state,
                                             @RequestParam(value = "from", required = false,
                                                     defaultValue = "0") Integer from,

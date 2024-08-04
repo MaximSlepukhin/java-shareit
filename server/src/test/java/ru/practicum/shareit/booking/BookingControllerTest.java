@@ -1,17 +1,23 @@
 package ru.practicum.shareit.booking;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
+import ru.practicum.shareit.booking.exceptions.BookingNotFoundException;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.error.ErrorHandler;
+import ru.practicum.shareit.error.ErrorResponse;
 import ru.practicum.shareit.util.Util;
 
 import java.nio.charset.StandardCharsets;
@@ -19,14 +25,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = BookingController.class)
+@Import(ErrorHandler.class)
 public class BookingControllerTest {
 
     @MockBean
@@ -55,7 +61,7 @@ public class BookingControllerTest {
     BookingDto updateBooking = BookingDto.builder().id(1L).start(LocalDateTime.now())
             .end(LocalDateTime.now().plusDays(3)).status(BookingStatus.APPROVED).build();
 
-    Pageable pageable = PageRequest.of(from,size);
+    Pageable pageable = PageRequest.of(from, size);
 
     @Test
     void addBookingTest() throws Exception {
@@ -107,14 +113,26 @@ public class BookingControllerTest {
 
     @Test
     void findAllBookingsOfOwner() throws Exception {
-        when(bookingService.findBookingsOfOwnerById(1L,"ALL",pageable))
+        when(bookingService.findBookingsOfOwnerById(1L, "ALL", pageable))
                 .thenReturn(listOfBookings);
         mockMvc.perform(get("/bookings/owner")
                         .header(Util.USER_HEADER, 1)
                         .param("from", "0")
                         .param("size", "20")
-                        .param("state","ALL"))
+                        .param("state", "ALL"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(listOfBookings)));
+    }
+
+    @Test
+    void shouldReturnErrorResponse() throws Exception {
+        ErrorResponse errorResponse = new ErrorResponse("Бронирование с id:1 не существует.");
+        when(bookingService.findBookingById(1L, bookingDto.getId()))
+                .thenThrow(new BookingNotFoundException(
+                        "Бронирование с id:1 не существует."));
+        mockMvc.perform(get("/bookings/" + bookingDto.getId())
+                        .header(Util.USER_HEADER, 1))
+                .andExpect(status().isNotFound())
+                .andExpect(content().json(mapper.writeValueAsString(errorResponse)));
     }
 }

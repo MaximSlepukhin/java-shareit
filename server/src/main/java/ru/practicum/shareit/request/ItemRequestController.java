@@ -23,7 +23,7 @@ public class ItemRequestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public ItemRequestDtoOut save(@RequestHeader(Util.USER_HEADER) Long userId,
+    public ItemRequestDtoOut save(@RequestHeader("X-Sharer-User-Id") Long userId,
                                   @RequestBody ItemRequestDto itemRequestDto) {
         log.info("POST запрос на добавление запроса от пользователя с id=" + userId + ".");
         return requestService.createRequest(userId, itemRequestDto);
@@ -32,14 +32,14 @@ public class ItemRequestController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemRequestDto> getRequestsOfUser(@RequestHeader(Util.USER_HEADER) Long userId) {
+    public List<ItemRequestDto> getRequestsOfUser(@RequestHeader("X-Sharer-User-Id") Long userId) {
         log.info("GET запрос на получение списка запросов с данными об ответах на них");
         return requestService.getRequestsOfUser(userId);
     }
 
     @GetMapping("/{requestId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemRequestDto getRequestById(@RequestHeader(Util.USER_HEADER) Long userId,
+    public ItemRequestDto getRequestById(@RequestHeader("X-Sharer-User-Id") Long userId,
                                          @PathVariable Long requestId) {
         log.info("GET запрос на получение списка запросов с данными об ответах на них");
         return requestService.getRequestById(userId, requestId);
@@ -47,7 +47,7 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemRequestDto> getItemRequests(@RequestHeader(Util.USER_HEADER) Long userId,
+    public List<ItemRequestDto> getItemRequests(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                 @RequestParam(value = "from", required = false,
                                                         defaultValue = "0") Integer from,
                                                 @RequestParam(value = "size", required = false,
