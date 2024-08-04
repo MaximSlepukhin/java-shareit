@@ -27,6 +27,7 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.request.ItemRequest;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.userExceptions.UserIsNotOwnerException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -164,6 +165,18 @@ public class BookingServiceImplTest {
         BookingDto result = bookingServiceImpl.updateStatus(1L, 1L, true);
 
         Assertions.assertEquals(result, bookingApprovedDto);
+    }
+    @Test
+    void shouldReturnExceptionWhenUserIsNotOwner() {
+        when(userRepository.findById(11L))
+                .thenReturn(Optional.ofNullable(owner));
+        when(bookingRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(bookingFromRepository));
+
+        UserIsNotOwnerException exception = Assertions.assertThrows(
+                UserIsNotOwnerException.class,
+                () -> bookingServiceImpl.updateStatus(11L, 1L, true));
+        Assertions.assertEquals(exception.getMessage(), "Пользователь с id: 11 не является владельцем вещи.");
     }
 
     @Test
