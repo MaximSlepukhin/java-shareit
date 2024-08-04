@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
         try {
             repository.save(user);
         } catch (DataIntegrityViolationException e) {
-            throw new UserEmailException("Пользователь с " + user.getEmail() + " существует");
+            throw new UserEmailException("Пользователь с аналогичной почтой существует");
         }
         log.debug("Данные пользователя с id=" + userId + " обновлены.");
         return UserMapper.toUserDto(user);
