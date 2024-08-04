@@ -3,11 +3,13 @@ package ru.practicum.shareit.user.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
+import ru.practicum.shareit.user.userExceptions.UserEmailException;
 import ru.practicum.shareit.user.userExceptions.UserNotFoundException;
 
 import java.util.Collection;
@@ -27,7 +29,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto createUser(UserDto userDto) {
         User user = UserMapper.toUser(userDto);
-        user = repository.save(user);
+        try {
+            user = repository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new UserEmailException("Пользователь с " + userDto.getEmail() + " существует");
+        }
         log.debug("Новый пользователь добавлен.");
         return UserMapper.toUserDto(user);
     }
@@ -49,7 +55,11 @@ public class UserServiceImpl implements UserService {
                     user.setEmail(value);
             }
         }
-        repository.save(user);
+        try {
+            repository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new UserEmailException("Пользователь с " + user.getEmail() + " существует");
+        }
         log.debug("Данные пользователя с id=" + userId + " обновлены.");
         return UserMapper.toUserDto(user);
     }

@@ -10,6 +10,7 @@ import ru.practicum.shareit.booking.exceptions.BookingNotFoundException;
 import ru.practicum.shareit.booking.exceptions.BookingStatusException;
 import ru.practicum.shareit.booking.exceptions.StateNotFoundException;
 import ru.practicum.shareit.item.itemExceptions.*;
+import ru.practicum.shareit.user.userExceptions.UserEmailException;
 import ru.practicum.shareit.user.userExceptions.UserNotFoundException;
 
 @Slf4j
@@ -82,6 +83,15 @@ public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBookingStatusException(final BookingStatusException e) {
+        log.error(e.getMessage());
+        return new ErrorResponse(
+                e.getMessage()
+        );
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleUserEmailException(final UserEmailException e) {
         log.error(e.getMessage());
         return new ErrorResponse(
                 e.getMessage()
