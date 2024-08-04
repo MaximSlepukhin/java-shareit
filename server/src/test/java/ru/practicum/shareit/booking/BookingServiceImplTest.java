@@ -249,6 +249,35 @@ public class BookingServiceImplTest {
     }
 
     @Test
+    void shouldGetAllBookingsOfUserWhenStateIsWaiting() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        Page<Booking> bookingPage = new PageImpl<>(listOfBookings);
+        when(bookingRepository.findByBookerIdAndStatusOrderByStartDesc(anyLong(),
+                any(BookingStatus.class), any(Pageable.class)))
+                .thenReturn(bookingPage);
+
+        List<BookingDto> result = bookingServiceImpl.getAllBookingsOfUser(1L,
+                "WAITING", pageable);
+
+        Assertions.assertEquals(result, listOfBookingsDto);
+    }
+
+    @Test
+    void shouldGetAllBookingsOfUserWhenStateIsRejected() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        Page<Booking> bookingPage = new PageImpl<>(listOfBookings);
+        when(bookingRepository.findByBookerIdAndStatusOrderByStartDesc(anyLong(),
+                        any(BookingStatus.class), any(Pageable.class)))
+                .thenReturn(bookingPage);
+
+        List<BookingDto> result = bookingServiceImpl.getAllBookingsOfUser(1L,
+                "REJECTED", pageable);
+
+        Assertions.assertEquals(result, listOfBookingsDto);
+    }
+    @Test
     void shouldFindBookingsOfOwnerByIdWhenStateIsPast() {
         when(userRepository.findById(1L))
                 .thenReturn(Optional.ofNullable(owner));
@@ -290,6 +319,33 @@ public class BookingServiceImplTest {
         Assertions.assertEquals(result, listOfBookingsDto);
     }
 
+    @Test
+    void shouldFindBookingsOfOwnerByIdWhenStateIsWaiting() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        Page<Booking> bookingPage = new PageImpl<>(listOfBookings);
+        when(bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(anyLong(), any(BookingStatus.class),
+                any(Pageable.class)))
+                .thenReturn(bookingPage);
+
+        List<BookingDto> result = bookingServiceImpl.findBookingsOfOwnerById(1L, "WAITING", pageable);
+
+        Assertions.assertEquals(result, listOfBookingsDto);
+    }
+
+    @Test
+    void shouldFindBookingsOfOwnerByIdWhenStateIsRejected() {
+        when(userRepository.findById(1L))
+                .thenReturn(Optional.ofNullable(owner));
+        Page<Booking> bookingPage = new PageImpl<>(listOfBookings);
+        when(bookingRepository.findByItemOwnerIdAndStatusOrderByStartDesc(anyLong(), any(BookingStatus.class),
+                any(Pageable.class)))
+                .thenReturn(bookingPage);
+
+        List<BookingDto> result = bookingServiceImpl.findBookingsOfOwnerById(1L, "REJECTED", pageable);
+
+        Assertions.assertEquals(result, listOfBookingsDto);
+    }
     @Test
     void shouldFindBookingsOfOwnerById() {
         when(userRepository.findById(1L))
