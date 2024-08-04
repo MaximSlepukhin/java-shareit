@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.util.Util;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class BookingController {
     }
 
     @GetMapping("/{bookingId}")
-    public BookingDto findBookingById(@RequestHeader(Util.USER_HEADER) Long userId,
+    public BookingDto findBookingById(@RequestHeader("X-Sharer-User-Id") Long userId,
                                       @PathVariable Long bookingId) {
         log.info("GET запрос на получение данных о бронировании с id:{} от пользователя с id:{}", bookingId, userId);
         return bookingService.findBookingById(userId, bookingId);

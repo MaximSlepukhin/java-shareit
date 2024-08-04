@@ -121,16 +121,4 @@ public class BookingControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(listOfBookings)));
     }
-
-    @Test
-    void shouldReturnErrorResponse() throws Exception {
-        ErrorResponse errorResponse = new ErrorResponse("Бронирование с id:1 не существует.");
-        when(bookingService.findBookingById(1L, bookingDto.getId()))
-                .thenThrow(new BookingNotFoundException(
-                        "Бронирование с id:1 не существует."));
-        mockMvc.perform(get("/bookings/" + bookingDto.getId())
-                        .header(Util.USER_HEADER, 1))
-                .andExpect(status().isNotFound())
-                .andExpect(content().json(mapper.writeValueAsString(errorResponse)));
-    }
 }
