@@ -289,6 +289,7 @@ public class BookingServiceImplTest {
 
         Assertions.assertEquals(result, listOfBookingsDto);
     }
+
     @Test
     void shouldFindBookingsOfOwnerById() {
         when(userRepository.findById(1L))
