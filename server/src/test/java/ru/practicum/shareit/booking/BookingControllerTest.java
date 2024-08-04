@@ -14,7 +14,6 @@ import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.error.ErrorHandler;
-import ru.practicum.shareit.util.Util;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -68,7 +67,7 @@ public class BookingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .characterEncoding(StandardCharsets.UTF_8)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(Util.USER_HEADER, 1))
+                        .header("X-Sharer-User-Id", 1))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(mapper.writeValueAsString(bookingDto)));
     }
@@ -78,7 +77,7 @@ public class BookingControllerTest {
         when(bookingService.updateStatus(1L, 1L, true))
                 .thenReturn(updateBooking);
         mockMvc.perform(patch("/bookings/" + bookingDto.getId())
-                        .header(Util.USER_HEADER, 1)
+                        .header("X-Sharer-User-Id", 1)
                         .param("approved", "true"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(updateBooking)));
@@ -89,7 +88,7 @@ public class BookingControllerTest {
         when(bookingService.findBookingById(1L,bookingDto.getId()))
                 .thenReturn(bookingDto);
         mockMvc.perform(get("/bookings/" + bookingDto.getId())
-                        .header(Util.USER_HEADER, 1))
+                        .header("X-Sharer-User-Id", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(bookingDto)));
     }
@@ -99,7 +98,7 @@ public class BookingControllerTest {
         when(bookingService.getAllBookingsOfUser(1L,"ALL",pageable))
                 .thenReturn(listOfBookings);
         mockMvc.perform(get("/bookings")
-                        .header(Util.USER_HEADER, 1)
+                        .header("X-Sharer-User-Id", 1)
                         .param("from", "0")
                         .param("size", "20")
                         .param("state","ALL"))
@@ -112,7 +111,7 @@ public class BookingControllerTest {
         when(bookingService.findBookingsOfOwnerById(1L, "ALL", pageable))
                 .thenReturn(listOfBookings);
         mockMvc.perform(get("/bookings/owner")
-                        .header(Util.USER_HEADER, 1)
+                        .header("X-Sharer-User-Id", 1)
                         .param("from", "0")
                         .param("size", "20")
                         .param("state", "ALL"))

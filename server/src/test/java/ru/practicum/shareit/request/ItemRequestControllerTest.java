@@ -14,7 +14,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestDtoOut;
 import ru.practicum.shareit.request.service.RequestService;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.util.Util;
 
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
@@ -66,7 +65,7 @@ public class ItemRequestControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(Util.USER_HEADER, "1"))
+                        .header("X-Sharer-User-Id", "1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(itemRequestDtoOut)));
     }
@@ -76,7 +75,7 @@ public class ItemRequestControllerTest {
         when(requestService.getRequestsOfUser(anyLong()))
                 .thenReturn(itemRequestDtos);
         mockMvc.perform(get("/requests")
-                        .header(Util.USER_HEADER, "1"))
+                        .header("X-Sharer-User-Id", "1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(itemRequestDtos)));
     }
@@ -86,7 +85,7 @@ public class ItemRequestControllerTest {
         when(requestService.getRequestById(anyLong(), anyLong()))
                 .thenReturn(itemRequestDto);
         mockMvc.perform(get("/requests/" + 1)
-                        .header(Util.USER_HEADER, "1"))
+                        .header("X-Sharer-User-Id", "1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(itemRequestDto)));
     }
@@ -96,7 +95,7 @@ public class ItemRequestControllerTest {
         when(requestService.getRequests(anyLong(), any(Pageable.class)))
                 .thenReturn(itemRequestDtos);
         mockMvc.perform(get("/requests/all")
-                        .header(Util.USER_HEADER, "1")
+                        .header("X-Sharer-User-Id", "1")
                         .param("from", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())

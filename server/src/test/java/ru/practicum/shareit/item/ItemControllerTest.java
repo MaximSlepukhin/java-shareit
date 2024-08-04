@@ -13,7 +13,7 @@ import ru.practicum.shareit.item.dto.CommentDtoOut;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemDtoOut;
 import ru.practicum.shareit.item.service.ItemService;
-import ru.practicum.shareit.util.Util;
+
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -75,7 +75,7 @@ public class ItemControllerTest {
                         .content(mapper.writeValueAsString(itemDtoFirstIn))
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header(Util.USER_HEADER, 1))
+                        .header("X-Sharer-User-Id", 1))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(itemDtoFirstOut)));
@@ -90,7 +90,7 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(Util.USER_HEADER, 1)
+                        .header("X-Sharer-User-Id", 1)
                         .param("itemId", "1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(commentDtoOut)));
@@ -105,7 +105,7 @@ public class ItemControllerTest {
                         .characterEncoding(StandardCharsets.UTF_8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-                        .header(Util.USER_HEADER, 1)
+                        .header("X-Sharer-User-Id", 1)
                         .param("itemId", "1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(itemDtoFirstUpdateOut)));
@@ -117,7 +117,7 @@ public class ItemControllerTest {
                 .thenReturn(itemDtoOutGetById);
         mockMvc.perform(get("/items/" + itemDtoOutGetById.getId())
                         .param("itemId", "1")
-                        .header(Util.USER_HEADER, 1))
+                        .header("X-Sharer-User-Id", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(itemDtoOutGetById)));
     }
@@ -127,7 +127,7 @@ public class ItemControllerTest {
         when(itemService.findItemsOfUser(anyLong(), any(Pageable.class)))
                 .thenReturn(listItemsOfUser);
         mockMvc.perform(get("/items")
-                        .header(Util.USER_HEADER, 1)
+                        .header("X-Sharer-User-Id", 1)
                         .param("from", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())
@@ -142,7 +142,7 @@ public class ItemControllerTest {
                         .param("text", "text")
                         .param("from", "0")
                         .param("size", "10")
-                        .header(Util.USER_HEADER, 1))
+                        .header("X-Sharer-User-Id", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(listOfItems)));
     }
