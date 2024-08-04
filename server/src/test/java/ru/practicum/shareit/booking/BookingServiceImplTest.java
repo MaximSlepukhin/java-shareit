@@ -166,6 +166,7 @@ public class BookingServiceImplTest {
 
         Assertions.assertEquals(result, bookingApprovedDto);
     }
+
     @Test
     void shouldReturnExceptionWhenUserIsNotOwner() {
         when(userRepository.findById(11L))

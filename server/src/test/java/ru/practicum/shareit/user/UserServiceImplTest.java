@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.practicum.shareit.booking.exceptions.StateNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserServiceImpl;
@@ -30,7 +29,6 @@ public class UserServiceImplTest {
 
     UserDto userDtoOut = new UserDto(1L, "User1", "user1@mail.ru");
 
-    //User userNotFound = new User(11L,"User11","user11@mail.ru");
     User userDuplicateEmail = new User(1L,"User1","user1@mail.ru");
 
     User newUser = User.builder().name("User1").email("user1@mail.ru").build();
@@ -74,6 +72,7 @@ public class UserServiceImplTest {
 
         Assertions.assertEquals(result,userDtoOut);
     }
+
     @Test
     void shouldReturnExceptionWhenEmailIsExist() {
         when(userRepository.save(userDuplicateEmail))
