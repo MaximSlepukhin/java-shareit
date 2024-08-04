@@ -12,10 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingDtoRequest;
-import ru.practicum.shareit.booking.exceptions.BookingNotFoundException;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.error.ErrorHandler;
-import ru.practicum.shareit.error.ErrorResponse;
 import ru.practicum.shareit.util.Util;
 
 import java.nio.charset.StandardCharsets;
